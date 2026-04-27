@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sinah Schwemmer — Swim Coach · Athlete · Amsterdam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="i18n.js"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="comps-hero.jsx"></script>
+<script type="text/babel" src="comps-sections.jsx"></script>
+<script type="text/babel" src="swimmer.jsx"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#f7f5f1">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#f7f5f1"/>
+    <g transform="translate(600 400)">
+      <rect x="-340" y="-160" width="680" height="320" fill="#0f766e" rx="6"/>
+      <text x="-300" y="-30" font-family="Impact, sans-serif" font-size="180" fill="#fb923c" letter-spacing="-2">SINAH</text>
+      <text x="-300" y="120" font-family="Impact, sans-serif" font-size="100" fill="none" stroke="#f7f5f1" stroke-width="2">SCHWEMMER</text>
+    </g>
+    <g transform="translate(0 720)" fill="none" stroke="#0f766e" stroke-width="3" stroke-dasharray="20 12">
+      <line x1="0" y1="0" x2="1200" y2="0"/>
+    </g>
+  </svg>
+</template>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": "sunrise",
+  "theme": "light",
+  "heroLayout": "split",
+  "animIntensity": "high",
+  "lang": "en"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [meters, setMeters] = useState(0);
+
+  // expose lang globally for comps that read it directly
+  window.__lang = tweaks.lang;
+  const t = window.I18N[tweaks.lang] || window.I18N.en;
+
+  // apply theme/palette/animation attrs to <html>
+  useEffect(() => {
+    const r = document.documentElement;
+    r.setAttribute('data-theme', tweaks.theme);
+    r.setAttribute('data-palette', tweaks.palette);
+    r.setAttribute('data-anim', tweaks.animIntensity);
+  }, [tweaks.theme, tweaks.palette, tweaks.animIntensity]);
+
+  // scroll → meters
+  useEffect(() => {
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? window.scrollY / max : 0;
+      // total page = 3000m (50m pool × 60 lengths)
+      setMeters(p * 3000);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <>
+      <Nav lang={tweaks.lang} setLang={(l)=>setTweak('lang', l)} theme={tweaks.theme} setTheme={(v)=>setTweak('theme', v)} />
+      <SwimmerTrack intensity={tweaks.animIntensity} />
+      <MeterHud meters={meters} label={t.meter} />
+
+      <Hero layout={tweaks.heroLayout} t={t} />
+      <Ribbon t={t} />
+      <About t={t} />
+      <div className="lane-divider"></div>
+      <Records t={t} />
+      <Coaching t={t} />
+      <Timeline t={t} />
+      <Gallery t={t} />
+      <Testimonials t={t} />
+      <Certs t={t} />
+      <Contact t={t} />
+      <Footer t={t} />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection title="Palette">
+          <TweakRadio
+            value={tweaks.palette}
+            onChange={(v)=>setTweak('palette', v)}
+            options={[
+              { value:'aqua', label:'Aqua' },
+              { value:'deep', label:'Deep' },
+              { value:'electric', label:'Electric' },
+              { value:'sunrise', label:'Sunrise' },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Theme">
+          <TweakRadio
+            value={tweaks.theme}
+            onChange={(v)=>setTweak('theme', v)}
+            options={[
+              { value:'dark', label:'Dark' },
+              { value:'light', label:'Light' },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Hero layout">
+          <TweakRadio
+            value={tweaks.heroLayout}
+            onChange={(v)=>setTweak('heroLayout', v)}
+            options={[
+              { value:'default', label:'Default' },
+              { value:'split', label:'Split' },
+              { value:'stack', label:'Stack' },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Swimmer animation">
+          <TweakRadio
+            value={tweaks.animIntensity}
+            onChange={(v)=>setTweak('animIntensity', v)}
+            options={[
+              { value:'high', label:'High' },
+              { value:'low', label:'Low' },
+              { value:'off', label:'Off' },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Language">
+          <TweakRadio
+            value={tweaks.lang}
+            onChange={(v)=>setTweak('lang', v)}
+            options={[
+              { value:'en', label:'EN' },
+              { value:'de', label:'DE' },
+              { value:'nl', label:'NL' },
+            ]}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
