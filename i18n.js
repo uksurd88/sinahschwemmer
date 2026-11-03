@@ -87,6 +87,7 @@ window.I18N = {
       name: "Your name", email: "Email", level: "Swimming level", goal: "What do you want to work on?",
       lvl1: "Beginner — never swum before", lvl2: "Comfortable — improving technique", lvl3: "Intermediate — building distance", lvl4: "Advanced — racing / triathlon",
       send: "SEND ENQUIRY",
+      subject: "Swim coaching enquiry", opened: "✓ YOUR MAIL APP OPENED", openedNote: "Your mail app should now show a message to Sinah with your details. Press send there. Nothing opened? Email sinah.schwemmer@gmail.com directly.",
       eAddr: "Email", phoneAddr: "Based in", emailVal: "sinah.schwemmer@gmail.com", phoneVal: "AMSTERDAM, NL"
     },
     foot: { left: "© 2026 SINAH SCHWEMMER · COACHING", right: "DESIGNED WITH SALTWATER" }
@@ -152,6 +153,7 @@ window.I18N = {
       name: "Name", email: "E-Mail", level: "Schwimmlevel", goal: "Woran möchtest du arbeiten?",
       lvl1: "Anfänger:in — noch nie geschwommen", lvl2: "Sicher — Technik verbessern", lvl3: "Mittelstufe — Distanz aufbauen", lvl4: "Fortgeschritten — Wettkampf",
       send: "ANFRAGE SENDEN",
+      subject: "Anfrage Schwimmcoaching", opened: "✓ DEINE MAIL-APP IST OFFEN", openedNote: "Deine Mail-App sollte jetzt eine Nachricht an Sinah mit deinen Angaben zeigen. Dort auf Senden tippen. Nichts geöffnet? Schreib direkt an sinah.schwemmer@gmail.com.",
       eAddr: "E-Mail", phoneAddr: "Standort", emailVal: "sinah.schwemmer@gmail.com", phoneVal: "AMSTERDAM, NL"
     },
     foot: { left: "© 2026 SINAH SCHWEMMER · COACHING", right: "MIT SALZWASSER GESTALTET" }
@@ -217,6 +219,7 @@ window.I18N = {
       name: "Naam", email: "E-mail", level: "Zwemniveau", goal: "Waaraan wil je werken?",
       lvl1: "Beginner — nooit gezwommen", lvl2: "Comfortabel — techniek verbeteren", lvl3: "Gemiddeld — afstand opbouwen", lvl4: "Gevorderd — wedstrijd / triatlon",
       send: "STUUR AANVRAAG",
+      subject: "Aanvraag zwemcoaching", opened: "✓ JE MAILAPP IS GEOPEND", openedNote: "Je mailapp toont nu een bericht aan Sinah met je gegevens. Druk daar op verzenden. Niets geopend? Mail direct naar sinah.schwemmer@gmail.com.",
       eAddr: "E-mail", phoneAddr: "Locatie", emailVal: "sinah.schwemmer@gmail.com", phoneVal: "AMSTERDAM, NL"
     },
     foot: { left: "© 2026 SINAH SCHWEMMER · COACHING", right: "ONTWORPEN MET ZOUTWATER" }

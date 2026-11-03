@@ -251,18 +251,35 @@ function Contact({ t }) {
             </div>
           </div>
         </div>
-        <form className="contact-form" onSubmit={(e)=>{e.preventDefault();setSent(true);}}>
+        <form className="contact-form" onSubmit={(e)=>{
+          // No form service: build a prefilled email and hand it to the visitor's own mail app.
+          e.preventDefault();
+          const f = new FormData(e.currentTarget);
+          const v = (k) => String(f.get(k) || '').trim();
+          const body = [
+            t.contact.name + ': ' + v('name'),
+            t.contact.email + ': ' + v('email'),
+            t.contact.level + ': ' + v('level'),
+            '',
+            t.contact.goal,
+            v('goal'),
+          ].join('\r\n');
+          const subject = t.contact.subject + (v('name') ? ' (' + v('name') + ')' : '');
+          window.location.href = 'mailto:' + t.contact.emailVal +
+            '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          setSent(true);
+        }}>
           <div className="field">
             <label>{t.contact.name}</label>
-            <input type="text" required />
+            <input type="text" name="name" autoComplete="name" required />
           </div>
           <div className="field">
             <label>{t.contact.email}</label>
-            <input type="email" required />
+            <input type="email" name="email" autoComplete="email" required />
           </div>
           <div className="field">
             <label>{t.contact.level}</label>
-            <select>
+            <select name="level">
               <option>{t.contact.lvl1}</option>
               <option>{t.contact.lvl2}</option>
               <option>{t.contact.lvl3}</option>
@@ -271,11 +288,12 @@ function Contact({ t }) {
           </div>
           <div className="field">
             <label>{t.contact.goal}</label>
-            <textarea rows="3"></textarea>
+            <textarea name="goal" rows="3"></textarea>
           </div>
           <button type="submit" className="btn-primary">
-            {sent ? "✓ SENT" : t.contact.send}
+            {sent ? t.contact.opened : t.contact.send}
           </button>
+          {sent && <p style={{marginTop:16, fontSize:14, lineHeight:1.5}} role="status" aria-live="polite">{t.contact.openedNote}</p>}
         </form>
       </div>
     </section>

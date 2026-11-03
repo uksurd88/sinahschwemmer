@@ -133,6 +133,27 @@ const __TWEAKS_STYLE = `
   .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
 `;
 
+// ── Host gate ───────────────────────────────────────────────────────────────
+// The edit host protocol only runs during local development, when this page
+// and the window that embeds it are both on localhost. On the live site no
+// messages are sent to other windows and none are accepted from them.
+const __TWK_LOCAL_HOSTS = ['localhost', '127.0.0.1', '[::1]'];
+const __twkIsLocalOrigin = (origin) => {
+  try { return __TWK_LOCAL_HOSTS.includes(new URL(origin).hostname); } catch (e) { return false; }
+};
+const __TWK_ENABLED = __TWK_LOCAL_HOSTS.includes(window.location.hostname) && window.parent !== window;
+const __twkParentOrigin = () => {
+  try {
+    const o = new URL(document.referrer).origin;
+    return __twkIsLocalOrigin(o) ? o : null;
+  } catch (e) { return null; }
+};
+const __twkPost = (msg) => {
+  if (!__TWK_ENABLED) return;
+  const origin = __twkParentOrigin();
+  if (origin) window.parent.postMessage(msg, origin);
+};
+
 // ── useTweaks ───────────────────────────────────────────────────────────────
 // Single source of truth for tweak values. setTweak persists via the host
 // (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
@@ -145,7 +166,7 @@ function useTweaks(defaults) {
     const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
       ? keyOrEdits : { [keyOrEdits]: val };
     setValues((prev) => ({ ...prev, ...edits }));
-    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    __twkPost({ type: '__edit_mode_set_keys', edits });
   }, []);
   return [values, setTweak];
 }
@@ -190,19 +211,21 @@ function TweaksPanel({ title = 'Tweaks', children }) {
   }, [open, clampToViewport]);
 
   React.useEffect(() => {
+    if (!__TWK_ENABLED) return;
     const onMsg = (e) => {
+      if (e.source !== window.parent || !__twkIsLocalOrigin(e.origin)) return;
       const t = e?.data?.type;
       if (t === '__activate_edit_mode') setOpen(true);
       else if (t === '__deactivate_edit_mode') setOpen(false);
     };
     window.addEventListener('message', onMsg);
-    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    __twkPost({ type: '__edit_mode_available' });
     return () => window.removeEventListener('message', onMsg);
   }, []);
 
   const dismiss = () => {
     setOpen(false);
-    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+    __twkPost({ type: '__edit_mode_dismissed' });
   };
 
   const onDragStart = (e) => {
