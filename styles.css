@@ -858,11 +858,19 @@ body {
   .cert-list li > div:first-child { min-width: 0; overflow-wrap: break-word; }
 }
 
-/* Booking pills: dark text on the accent in light theme, where --ink is near white. */
+/* Text on the accent colour: dark in light theme, where --ink is near white. */
 [data-theme="light"] .nav-cta,
-[data-theme="light"] .hero-cta { color: var(--paper) !important; }
+[data-theme="light"] .hero-cta,
+[data-theme="light"] .hero-tag-primary { color: var(--paper) !important; }
+[data-theme="light"] .btn-primary,
+[data-theme="light"] .ribbon,
+[data-theme="light"] .ribbon-track span::after,
+[data-theme="light"] .record .badge-tiny,
+[data-theme="light"] .t-item .tag.athlete { color: var(--paper); }
 .nav-cta:focus-visible,
 .hero-cta:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+/* The send button sits on the dark contact gradient in both themes. */
+.btn-primary:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
 /* A lone gallery tile sits in the middle on wider screens. */
 @media (min-width: 801px) {
