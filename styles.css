@@ -799,3 +799,61 @@ body {
 [data-anim="off"] .swimmer-track,
 [data-anim="off"] .meter-hud { display: none; }
 [data-anim="low"] .hero-lanes { opacity: 0.08; }
+
+/* ===== PHONE LAYOUT ===== */
+/* Booking pill inside the hero, only shown on phones (the nav pill is hidden there). */
+.hero-cta { display: none; }
+
+/* The split and stack hero layouts fall back to one column on narrow screens too. */
+@media (max-width: 900px) {
+  .hero[data-layout] .hero-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  :root { --pad-x: 16px; }
+
+  /* Nav: full logo, compact 44px controls, no pill */
+  .nav { padding: 10px var(--pad-x); gap: 12px; }
+  .nav-mark { flex-shrink: 0; white-space: nowrap; }
+  .nav-links { gap: 8px; flex-shrink: 0; }
+  .nav .nav-cta { display: none; }
+  .theme-toggle { width: 44px; height: 44px; }
+  .lang-switch { padding: 0; gap: 0; font-size: 11px; }
+  .lang-switch button { min-width: 44px; height: 44px; padding: 0; }
+
+  /* Hero */
+  .hero { padding-top: 104px; }
+  .hero-grid > * { min-width: 0; }
+  .hero h1.display { font-size: clamp(44px, 17vw, 130px); }
+  .hero h1 .row .marker { display: none; }
+  .hero-cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 0 22px; margin-top: 24px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 999px; text-decoration: none;
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .hero-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .hero-meta .stat .lbl { letter-spacing: 0.06em; overflow-wrap: anywhere; }
+  .scroll-cue { display: none; }
+
+  /* Distance counter would cover content on a phone */
+  .meter-hud { display: none; }
+
+  /* About */
+  .implant-callout { flex-direction: column; gap: 8px; }
+
+  /* Contact: one column, full width inside the gutter */
+  .contact-grid { gap: 40px; }
+  .contact-grid > * { min-width: 0; }
+  .contact .lead { max-width: none; }
+  .contact-direct { grid-template-columns: 1fr; }
+  .contact-direct .item { min-width: 0; }
+  .contact-direct .item .v { overflow-wrap: anywhere; }
+  .contact-form { padding: 24px 20px; }
+  .contact-form p { overflow-wrap: anywhere; }
+
+  /* Certifications: let long names wrap next to the year */
+  .cert-list li > div:first-child { min-width: 0; overflow-wrap: break-word; }
+}

@@ -67,6 +67,7 @@ function Hero({ layout, t }) {
             <span className="row stroke">{t.hero.l2}<span className="marker">LANE 04 · 25M</span></span>
           </h1>
           <p className="hero-lead">{t.hero.lead}</p>
+          <a href="#contact" className="hero-cta">{t.nav.contact} →</a>
           <div className="hero-tags">
             <span className="hero-tag-primary">{t.hero.tag3}</span>
             <span>★ {t.hero.tag2}</span>

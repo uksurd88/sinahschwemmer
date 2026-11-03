@@ -1,6 +1,10 @@
 // Records, Coaching, Timeline, Gallery, Testimonials, Certs, Contact, Footer
 const { useState: useState2 } = React;
 
+// Placeholder content (empty gallery tiles, their "drop photos" note and the
+// sample testimonials) stays in the code but is hidden. Set to true to show it.
+const SHOW_PLACEHOLDERS = false;
+
 function Records({ t }) {
   const recs = [
     { y: t.record.r1Year, big: t.record.r1Title, sub: t.record.r1Sub, w: t.record.r1Where, tag: t.record.r1Tag },
@@ -117,15 +121,15 @@ function Gallery({ t }) {
     { cls: "g4", lbl: "1:1 SESSION" },
     { cls: "g5", lbl: "OPEN WATER" },
     { cls: "g6", lbl: "GROUP DRILL" },
-  ];
+  ].filter(tile => SHOW_PLACEHOLDERS || tile.real);
   return (
     <section className="section gallery">
       <div className="container">
-        <SectionHead idx={t.gallery.eyebrow} h={t.gallery.h} h2={t.gallery.h2} desc={t.gallery.desc} />
+        <SectionHead idx={t.gallery.eyebrow} h={t.gallery.h} h2={t.gallery.h2} desc={SHOW_PLACEHOLDERS ? t.gallery.desc : null} />
         <div className="gallery-grid">
           {tiles.map((tile,i)=>(
             <div key={i} className={"g-tile " + tile.cls + (tile.real ? " real" : "")}>
-              <span className="corner-tag">{String(i+1).padStart(2,'0')} / 06</span>
+              <span className="corner-tag">{String(i+1).padStart(2,'0')} / {String(tiles.length).padStart(2,'0')}</span>
               {tile.real ? <img src={tile.src} alt="" /> : <span className="label">[ {tile.lbl} ]<br/><span style={{opacity:0.6}}>drop image</span></span>}
             </div>
           ))}
@@ -136,6 +140,7 @@ function Gallery({ t }) {
 }
 
 function Testimonials({ t }) {
+  if (!SHOW_PLACEHOLDERS) return null;
   const lang = window.__lang || 'en';
   const items = lang === 'de' ? [
     { stars:"★★★★★", q:"„SINAH HAT MEINE TECHNIK IN ZWEI MONATEN VERÄNDERT — JEDER METER FÜHLT SICH JETZT LEICHTER AN.“", n:"Lara K.", r:"Master-Schwimmerin · Amsterdam" },
@@ -309,4 +314,4 @@ function Footer({ t }) {
   );
 }
 
-Object.assign(window, { Records, Coaching, Timeline, Gallery, Testimonials, Certs, Contact, Footer });
+Object.assign(window, { SHOW_PLACEHOLDERS, Records, Coaching, Timeline, Gallery, Testimonials, Certs, Contact, Footer });
