@@ -857,3 +857,14 @@ body {
   /* Certifications: let long names wrap next to the year */
   .cert-list li > div:first-child { min-width: 0; overflow-wrap: break-word; }
 }
+
+/* Booking pills: dark text on the accent in light theme, where --ink is near white. */
+[data-theme="light"] .nav-cta,
+[data-theme="light"] .hero-cta { color: var(--paper) !important; }
+.nav-cta:focus-visible,
+.hero-cta:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+
+/* A lone gallery tile sits in the middle on wider screens. */
+@media (min-width: 801px) {
+  .gallery-grid.single .g1 { grid-column: 4 / span 6; }
+}

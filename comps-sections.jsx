@@ -5,6 +5,10 @@ const { useState: useState2 } = React;
 // sample testimonials) stays in the code but is hidden. Set to true to show it.
 const SHOW_PLACEHOLDERS = false;
 
+// Section numbers after the testimonials move up by one while they are hidden.
+// Replaces the leading number of an eyebrow such as "07 / Toolkit".
+const sectionNo = (eyebrow, n) => eyebrow.replace(/^\d+/, String(n).padStart(2, '0'));
+
 function Records({ t }) {
   const recs = [
     { y: t.record.r1Year, big: t.record.r1Title, sub: t.record.r1Sub, w: t.record.r1Where, tag: t.record.r1Tag },
@@ -126,7 +130,7 @@ function Gallery({ t }) {
     <section className="section gallery">
       <div className="container">
         <SectionHead idx={t.gallery.eyebrow} h={t.gallery.h} h2={t.gallery.h2} desc={SHOW_PLACEHOLDERS ? t.gallery.desc : null} />
-        <div className="gallery-grid">
+        <div className={"gallery-grid" + (tiles.length === 1 ? " single" : "")}>
           {tiles.map((tile,i)=>(
             <div key={i} className={"g-tile " + tile.cls + (tile.real ? " real" : "")}>
               <span className="corner-tag">{String(i+1).padStart(2,'0')} / {String(tiles.length).padStart(2,'0')}</span>
@@ -198,7 +202,7 @@ function Certs({ t }) {
   return (
     <section className="section certs">
       <div className="container">
-        <SectionHead idx={t.certs.eyebrow} h={t.certs.h} h2={t.certs.h2} />
+        <SectionHead idx={sectionNo(t.certs.eyebrow, SHOW_PLACEHOLDERS ? 7 : 6)} h={t.certs.h} h2={t.certs.h2} />
         <div className="certs-grid">
           <div className="certs-col">
             <h3>{t.certs.certs}</h3>
@@ -238,7 +242,7 @@ function Contact({ t }) {
     <section className="section contact" id="contact">
       <div className="container contact-grid">
         <div>
-          <div className="eyebrow" style={{marginBottom:24}}>{t.contact.eyebrow}</div>
+          <div className="eyebrow" style={{marginBottom:24}}>{sectionNo(t.contact.eyebrow, SHOW_PLACEHOLDERS ? 8 : 7)}</div>
           <h2 className="display">
             {t.contact.h}<br/>
             <span className="y">{t.contact.h2}</span><br/>
